@@ -41,14 +41,13 @@ var FileSystem = require("fs-extra");
 var packlist = require("npm-packlist");
 var path = require("path");
 (function () { return __awaiter(_this, void 0, void 0, function () {
-    var packageDirectory, packageJson, packageNodeModuleDirectory, filenames;
+    var packageJson, packageNodeModuleDirectory, filenames;
     var _this = this;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                packageDirectory = process.cwd();
-                packageJson = require(path.resolve(packageDirectory, 'package.json'));
-                packageNodeModuleDirectory = path.join(packageDirectory, 'node_modules', packageJson.name);
+                packageJson = require(path.resolve(process.cwd(), 'package.json'));
+                packageNodeModuleDirectory = path.join('node_modules', packageJson.name);
                 return [4 /*yield*/, packlist()];
             case 1:
                 filenames = _a.sent();
@@ -74,13 +73,13 @@ var path = require("path");
                             switch (_a.label) {
                                 case 0:
                                     filename = packageJson.bin[name];
-                                    return [4 /*yield*/, FileSystem.ensureDir(path.join(packageDirectory, 'node_modules', '.bin'))];
+                                    return [4 /*yield*/, FileSystem.ensureDir(path.join('node_modules', '.bin'))];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, FileSystem.copyFile(path.join(packageNodeModuleDirectory, filename), path.join(packageDirectory, 'node_modules', '.bin', name))];
+                                    return [4 /*yield*/, FileSystem.remove(path.join('node_modules', '.bin', name))];
                                 case 2:
                                     _a.sent();
-                                    return [4 /*yield*/, FileSystem.chmod(path.join(packageDirectory, 'node_modules', '.bin', name), '755')];
+                                    return [4 /*yield*/, FileSystem.symlink(path.relative(path.join('node_modules', '.bin'), path.join(packageNodeModuleDirectory, filename)), path.join('node_modules', '.bin', name))];
                                 case 3:
                                     _a.sent();
                                     return [2 /*return*/];
