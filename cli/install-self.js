@@ -51,20 +51,23 @@ var path = require("path");
                 return [4 /*yield*/, packlist()];
             case 1:
                 filenames = _a.sent();
+                return [4 /*yield*/, FileSystem.remove(packageNodeModuleDirectory)];
+            case 2:
+                _a.sent();
                 return [4 /*yield*/, Promise.all(filenames.map(function (filename) { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, FileSystem.ensureDir(path.join(packageNodeModuleDirectory, path.dirname(filename)))];
                                 case 1:
                                     _a.sent();
-                                    return [4 /*yield*/, FileSystem.copyFile(filename, path.join(packageNodeModuleDirectory, filename))];
+                                    return [4 /*yield*/, FileSystem.symlink(path.relative(path.join(packageNodeModuleDirectory, path.dirname(filename)), filename), path.join(packageNodeModuleDirectory, filename))];
                                 case 2:
                                     _a.sent();
                                     return [2 /*return*/];
                             }
                         });
                     }); }))];
-            case 2:
+            case 3:
                 _a.sent();
                 return [4 /*yield*/, Promise.all(Object.keys(packageJson.bin || {})
                         .map(function (name) { return __awaiter(_this, void 0, void 0, function () {
@@ -88,7 +91,7 @@ var path = require("path");
                     }); }))
                     // log errors or log everything's A-OK
                 ];
-            case 3:
+            case 4:
                 _a.sent();
                 return [2 /*return*/];
         }
